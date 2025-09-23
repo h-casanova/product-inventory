@@ -16,9 +16,10 @@ public class ProductController {
     ProductService service;
 
     @GET
-    public List<Product> getAll() {
-        return service.listAll();
-    }
+    public List<Product> getAll(@QueryParam("page") @DefaultValue("0") int page, @QueryParam("size") @DefaultValue("0") int size
+        ) {
+            return service.listAll(page, size);
+        }
 
     @GET
     @Path("/{id}")
