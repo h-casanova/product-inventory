@@ -9,18 +9,19 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Product extends PanacheEntity {
-
-    @NotBlank
+	
+    @NotBlank(message = "Name is required")
     public String name;
 
+    @NotBlank(message = "Description is required")
     public String description;
 
-    @NotNull
-    @Min(0)
+    @NotNull(message = "Price is required")
+    @Min(value = 0, message = "Price must be non-negative")
     public Double price;
 
-    @NotNull
-    @Min(0)
+    @NotNull(message = "Quantity is required")
+    @Min(value = 0, message = "Quantity must be non-negative")
     public Integer quantity;
 
     @Version

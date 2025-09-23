@@ -83,7 +83,11 @@ POST /products
 
 		db/initialDataFeed.sql
 
-	src/test/java/...
+	src/test/resources/
+	
+		application-test.properties
+		
+		db/initialDataFeed.sql
 
 ### Running the Project
 ##### Prerequisites
