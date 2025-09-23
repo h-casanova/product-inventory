@@ -118,6 +118,10 @@ OpenAPI Spec: http://localhost:8080/q/openapi
 Run unit and integration tests:
 
 	./mvnw test
+	
+Run only integration tests:
+
+	./mvnw verify
 
 Includes positive (2xx) and negative (4xx/5xx) scenarios.
 
