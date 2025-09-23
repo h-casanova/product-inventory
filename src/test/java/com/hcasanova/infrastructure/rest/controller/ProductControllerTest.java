@@ -38,9 +38,21 @@ class ProductControllerTest {
             .statusCode(200)
             .body("$.size()", is(5));
     }
-
+    
     @Test
     @Order(3)
+    void testPaginationInvalidParams() {
+        RestAssured.given()
+            .queryParam("page", -1)
+            .queryParam("size", -5)
+            .when().get("/products")
+            .then()
+            .statusCode(500);
+    }
+
+
+    @Test
+    @Order(4)
     void testGetProductByIdFound() {
         RestAssured.given()
             .when().get("/products/0")
@@ -52,7 +64,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void testGetProductByIdNotFound() {
         RestAssured.given()
             .when().get("/products/999")
@@ -61,7 +73,7 @@ class ProductControllerTest {
     }
     
     @Test
-    @Order(5)
+    @Order(6)
     void testCreateSingleProduct() {
         String json = """
             {
@@ -93,7 +105,7 @@ class ProductControllerTest {
     }
     
     @Test
-    @Order(6)
+    @Order(7)
     void testCreateBulkProducts() {
         String json = """
             [
@@ -131,6 +143,44 @@ class ProductControllerTest {
                 .body("id", is(id));
         }
     }
-   
+    
+    @Test
+    @Order(8)
+    void testCreateSingleProductInvalidData() {
+        String json = """
+            {
+                "name": "",
+                "description": "Invalid product",
+                "price": -10,
+                "quantity": -5
+            }
+        """;
 
+        RestAssured.given()
+            .header("Content-Type", "application/json")
+            .body(json)
+            .when().post("/products/create-single")
+            .then()
+            .statusCode(400);
+    }
+   
+    @Test
+    @Order(9)
+    void testCreateBulkProductsEmptyList() {
+    	String json = """
+                {
+                    "name": "Laptop 2025",
+                    "description": "Cutting edge tech",
+                    "price": 100,
+                    "quantity": 15
+                }
+            """;
+
+        RestAssured.given()
+            .header("Content-Type", "application/json")
+            .body(json)
+            .when().post("/products/create-bulk")
+            .then()
+            .statusCode(400);
+    }
 }

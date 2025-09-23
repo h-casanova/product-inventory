@@ -29,6 +29,207 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "List products paginated",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{localhost}}/products?page=0&size=5",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a single product",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{localhost}}/products/1",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a single product",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Laptop 2025\",\r\n    \"description\": \"Cutting edge tech\",\r\n    \"price\": 2500,\r\n    \"quantity\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/products/create-single",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"products",
+						"create-single"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Missing fields when creating a product",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/products/create-single",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"products",
+						"create-single"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create bulk products",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"name\": \"Monitor 2025\",\r\n        \"description\": \"Cutting edge tech\",\r\n        \"price\": 2500,\r\n        \"quantity\": 10\r\n    }, {\r\n        \"name\": \"Mouse 2025\",\r\n        \"description\": \"Cutting edge tech\",\r\n        \"price\": 100,\r\n        \"quantity\": 15\r\n    }  \r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/products/create-bulk",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"products",
+						"create-bulk"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Missing fields when creating multiple products",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"name\": \"Monitor 2025\",\r\n        \"description\": \"Cutting edge tech\"\r\n    }, {\r\n        \"price\": 100,\r\n        \"quantity\": 15\r\n    }  \r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/products/create-bulk",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"products",
+						"create-bulk"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
