@@ -6,20 +6,24 @@ import jakarta.validation.constraints.NotNull;
 
 public class ProductDTO {
 
-	public Long id;
-	
-    @NotBlank(message = "Name is required")
-    public String name;
+  public Long id;
 
-    public String description;
+  @NotBlank(message = "Name is required")
+  public String name;
 
-    @NotNull(message = "Price is required")
-    @Min(value = 0, message = "Price must be non-negative")
-    public Double price;
+  public String description;
 
-    @NotNull(message = "Quantity is required")
-    @Min(value = 0, message = "Quantity must be non-negative")
-    public Integer quantity;
+  @NotNull(message = "Price is required")
+  @Min(value = 0, message = "Price must be non-negative")
+  public Double price;
 
-    public Long version;
+  @NotNull(message = "Quantity is required")
+  @Min(value = 0, message = "Quantity must be non-negative")
+  public Integer quantity;
+
+  public Long version;
+
+  // Relation with category
+  public Long categoryId;
+  public String categoryName;
 }
