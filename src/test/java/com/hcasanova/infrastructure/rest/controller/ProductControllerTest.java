@@ -183,4 +183,115 @@ class ProductControllerTest {
             .then()
             .statusCode(400);
     }
+
+    @Test
+    @Order(10)
+    void testUpdateExistingProductSuccess() {
+        String updateJson = """
+            {
+                "name": "Laptop UPDATED",
+                "description": "Updated description",
+                "price": 1600,
+                "quantity": 7,
+                "version": 0
+            }
+        """;
+
+        RestAssured.given()
+            .header("Content-Type", "application/json")
+            .body(updateJson)
+            .when().put("/products/0")
+            .then()
+            .statusCode(200)
+            .body("name", is("Laptop UPDATED"))
+            .body("price", is(1600.0f))
+            .body("quantity", is(7))
+            .body("version", is(1));
+    }
+
+    @Test
+    @Order(11)
+    void testUpdateExistingProductVersionMismatch() {
+        String updateJson = """
+            {
+                "name": "Laptop FAILED",
+                "description": "This should fail",
+                "price": 1700,
+                "quantity": 8,
+                "version": 0
+            }
+        """;
+
+        RestAssured.given()
+            .header("Content-Type", "application/json")
+            .body(updateJson)
+            .when().put("/products/0")
+            .then()
+            .statusCode(500)
+            .body(containsString("Version mismatch"));
+    }
+
+    @Test
+    @Order(12)
+    void testUpdateNonExistingProduct() {
+        String updateJson = """
+            {
+                "name": "Nonexistent",
+                "description": "Does not exist",
+                "price": 50,
+                "quantity": 5,
+                "version": 0
+            }
+        """;
+
+        RestAssured.given()
+            .header("Content-Type", "application/json")
+            .body(updateJson)
+            .when().put("/products/999")
+            .then()
+            .statusCode(404);
+    }
+    
+    @Test
+    @Order(13)
+    void testDeleteExistingProduct() {
+        String json = """
+            {
+                "name": "ToDelete",
+                "description": "Product to be deleted",
+                "price": 50,
+                "quantity": 5
+            }
+        """;
+
+        int id = RestAssured.given()
+            .header("Content-Type", "application/json")
+            .body(json)
+            .when().post("/products/create-single")
+            .then()
+            .statusCode(200)
+            .extract()
+            .path("id");
+
+        RestAssured.given()
+            .when().delete("/products/" + id)
+            .then()
+            .statusCode(200)
+            .body("message", is("Product deleted successfully"));
+
+        RestAssured.given()
+            .when().get("/products/" + id)
+            .then()
+            .statusCode(404);
+    }
+
+    @Test
+    @Order(14)
+    void testDeleteNonExistingProduct() {
+        RestAssured.given()
+            .when().delete("/products/99999")
+            .then()
+            .statusCode(404);
+    }
+
 }

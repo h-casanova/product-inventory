@@ -230,6 +230,39 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Update a product",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Webcam UPDATE\",\r\n    \"description\": \"HD webcam UPDATE\",\r\n    \"price\": 60.0,\r\n    \"quantity\": 30,\r\n    \"version\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/products/5",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"products",
+						"5"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
