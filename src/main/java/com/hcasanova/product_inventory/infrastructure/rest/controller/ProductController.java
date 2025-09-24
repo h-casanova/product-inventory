@@ -8,6 +8,7 @@ import com.hcasanova.product_inventory.infrastructure.rest.dto.ProductDTO;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import java.util.List;
@@ -30,15 +31,23 @@ public class ProductController {
     ProductMapper productMapper;
 
     @GET
-    @Operation(summary = "Get all products", description = "Returns all products. Supports optional pagination with page and size.")
+    @Operation(summary = "Get all products", description = "Returns all products. Supports optional pagination, filtering and sorting.")
     @APIResponses({
         @APIResponse(responseCode = "200", description = "List of products returned",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductDTO.class))),
-        @APIResponse(responseCode = "500", description = "Invalid pagination parameters")
+        @APIResponse(responseCode = "400", description = "Invalid parameters")
     })
-    public List<ProductDTO> getAll(@QueryParam("page") @DefaultValue("0") int page,
-                                   @QueryParam("size") @DefaultValue("0") int size) {
-        return productMapper.toDTOList(productService.listAll(page, size));
+    public List<ProductDTO> getAll(
+            @QueryParam("page") @Min(value = 0, message = "Page must be >= 0") @DefaultValue("0") int page,
+            @QueryParam("size") @Min(value = 0, message = "Size must be >= 0") @DefaultValue("0") int size,
+            @QueryParam("name") String name,
+            @QueryParam("minPrice") Double minPrice,
+            @QueryParam("maxPrice") Double maxPrice,
+            @QueryParam("sortBy") String sortBy,
+            @QueryParam("sortAsc") @DefaultValue("true") boolean sortAsc
+    ) {
+        List<Product> products = productService.listAll(page, size, name, minPrice, maxPrice, sortBy, sortAsc);
+        return productMapper.toDTOList(products);
     }
 
     @GET

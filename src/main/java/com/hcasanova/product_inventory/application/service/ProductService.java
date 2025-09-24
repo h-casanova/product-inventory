@@ -4,11 +4,11 @@ import com.hcasanova.product_inventory.domain.model.Product;
 import com.hcasanova.product_inventory.infrastructure.persistence.repository.ProductRepository;
 import com.hcasanova.product_inventory.infrastructure.rest.dto.ProductDTO;
 
-import io.quarkus.panache.common.Page;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
@@ -19,13 +19,51 @@ public class ProductService {
     @Inject
     ProductRepository productRepository;
 
-    public List<Product> listAll(int pageIndex, int pageSize) {    	
-        return pageIndex <= 0 && pageSize == 0
-            ? productRepository.listAll() 
-            : productRepository.findAll()
-                        .page(Page.of(pageIndex, pageSize))
-                        .list();
+    public List<Product> listAll(int page, int size, String name, Double minPrice, Double maxPrice, String sortBy, boolean sortAsc) {
+
+        if (page < 0 || size < 0) throw new BadRequestException("Page and size must be >= 0");
+
+        StringBuilder jpql = new StringBuilder("FROM Product p WHERE 1=1");
+        
+        // Filters
+        if (name != null && !name.isBlank()) {
+        	jpql.append(" AND p.name LIKE :name");
+        }
+        if (minPrice != null) {
+        	jpql.append(" AND p.price >= :minPrice");
+        }
+        if (maxPrice != null) {
+        	jpql.append(" AND p.price <= :maxPrice");
+        }
+
+        // Order by name or price
+        if (sortBy != null) {
+            if (!sortBy.equals("name") && !sortBy.equals("price")) throw new BadRequestException("Invalid sort field");
+            jpql.append(" ORDER BY p.").append(sortBy).append(sortAsc ? " ASC" : " DESC");
+        }
+
+        // Query arrangement and applying filters
+        var query = productRepository.getEntityManager().createQuery(jpql.toString(), Product.class);
+        if (name != null && !name.isBlank()) {
+        	query.setParameter("name", "%" + name + "%");
+        }
+        if (minPrice != null) {
+        	query.setParameter("minPrice", minPrice);
+        }
+        if (maxPrice != null) {
+        	query.setParameter("maxPrice", maxPrice);
+        }
+
+        // Full list or pagination
+        if (page == 0 && size == 0) {
+            return query.getResultList();
+        } else {
+            query.setFirstResult(page * size);
+            query.setMaxResults(size);
+            return query.getResultList();
+        }
     }
+
 
     public Product findById(Long id) {
         return productRepository.findById(id);

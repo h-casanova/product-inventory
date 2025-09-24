@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ProductControllerTest {
 	
+	// ----------------- BASIC TESTS -----------------
+
     @Test
     @Order(1)
     void testGetAllProductsInsertedFromFeed() {
@@ -26,7 +29,7 @@ class ProductControllerTest {
             .body("$.size()", is(25))
             .body("name", hasItems("Laptop", "Tablet", "Laptop Bag"));
     }
-    
+
     @Test
     @Order(2)
     void testPagination() {
@@ -38,7 +41,7 @@ class ProductControllerTest {
             .statusCode(200)
             .body("$.size()", is(5));
     }
-    
+
     @Test
     @Order(3)
     void testPaginationInvalidParams() {
@@ -47,12 +50,77 @@ class ProductControllerTest {
             .queryParam("size", -5)
             .when().get("/products")
             .then()
-            .statusCode(500);
+            .statusCode(400);
     }
 
+    // ----------------- FILTERS TESTS -----------------
 
     @Test
     @Order(4)
+    void testFilterByName() {
+        RestAssured.given()
+            .queryParam("name", "Laptop")
+            .when().get("/products")
+            .then()
+            .statusCode(200)
+            .body("$.size()", greaterThanOrEqualTo(2))
+            .body("name", everyItem(containsString("Laptop")));
+    }
+
+    @Test
+    @Order(5)
+    void testFilterByPriceRange() {
+        RestAssured.given()
+            .queryParam("minPrice", 100.0)
+            .queryParam("maxPrice", 500.0)
+            .when().get("/products")
+            .then()
+            .statusCode(200)
+            .body("price", everyItem(allOf(greaterThanOrEqualTo(100.0f), lessThanOrEqualTo(500.0f))));
+    }
+
+    // ----------------- ORDERING TESTS -----------------
+
+    @Test
+    @Order(6)
+    void testSortByNameAsc() {
+        List<String> names = RestAssured.given()
+            .queryParam("sortBy", "name")
+            .queryParam("sortAsc", true)
+            .queryParam("size", 25)
+            .when().get("/products")
+            .then()
+            .statusCode(200)
+            .extract()
+            .jsonPath().getList("name", String.class);
+
+        for (int i = 1; i < names.size(); i++) {
+            assertThat("Names not sorted ascending", names.get(i-1).compareTo(names.get(i)) <= 0);
+        }
+    }
+
+    @Test
+    @Order(7)
+    void testSortByPriceDesc() {
+        List<Float> prices = RestAssured.given()
+            .queryParam("sortBy", "price")
+            .queryParam("sortAsc", false)
+            .queryParam("size", 25)
+            .when().get("/products")
+            .then()
+            .statusCode(200)
+            .extract()
+            .jsonPath().getList("price", Float.class);
+
+        for (int i = 1; i < prices.size(); i++) {
+            assertThat("Prices not sorted descending", prices.get(i-1) >= prices.get(i));
+        }
+    }
+
+    // ----------------- GET BY ID TESTS -----------------
+
+    @Test
+    @Order(8)
     void testGetProductByIdFound() {
         RestAssured.given()
             .when().get("/products/0")
@@ -60,20 +128,22 @@ class ProductControllerTest {
             .statusCode(200)
             .body("id", is(0))
             .body("name", is("Laptop"))
-            .body("price", is(1500.0f)); // Interpretaa doubles
+            .body("price", is(1500.0f));
     }
 
     @Test
-    @Order(5)
+    @Order(9)
     void testGetProductByIdNotFound() {
         RestAssured.given()
             .when().get("/products/999")
             .then()
             .statusCode(404);
     }
-    
+
+    // ----------------- CREATION TESTS -----------------
+
     @Test
-    @Order(6)
+    @Order(10)
     void testCreateSingleProduct() {
         String json = """
             {
@@ -103,9 +173,9 @@ class ProductControllerTest {
             .body("id", is(id))
             .body("name", is("Laptop 2025"));
     }
-    
+
     @Test
-    @Order(7)
+    @Order(11)
     void testCreateBulkProducts() {
         String json = """
             [
@@ -143,9 +213,9 @@ class ProductControllerTest {
                 .body("id", is(id));
         }
     }
-    
+
     @Test
-    @Order(8)
+    @Order(12)
     void testCreateSingleProductInvalidData() {
         String json = """
             {
@@ -163,18 +233,18 @@ class ProductControllerTest {
             .then()
             .statusCode(400);
     }
-   
+
     @Test
-    @Order(9)
+    @Order(13)
     void testCreateBulkProductsEmptyList() {
-    	String json = """
-                {
-                    "name": "Laptop 2025",
-                    "description": "Cutting edge tech",
-                    "price": 100,
-                    "quantity": 15
-                }
-            """;
+        String json = """
+            {
+                "name": "Laptop 2025",
+                "description": "Cutting edge tech",
+                "price": 100,
+                "quantity": 15
+            }
+        """;
 
         RestAssured.given()
             .header("Content-Type", "application/json")
@@ -184,8 +254,10 @@ class ProductControllerTest {
             .statusCode(400);
     }
 
+    // ----------------- UPDATING TESTS -----------------
+
     @Test
-    @Order(10)
+    @Order(14)
     void testUpdateExistingProductSuccess() {
         String updateJson = """
             {
@@ -210,7 +282,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @Order(11)
+    @Order(15)
     void testUpdateExistingProductVersionMismatch() {
         String updateJson = """
             {
@@ -232,7 +304,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @Order(12)
+    @Order(16)
     void testUpdateNonExistingProduct() {
         String updateJson = """
             {
@@ -251,9 +323,11 @@ class ProductControllerTest {
             .then()
             .statusCode(404);
     }
-    
+
+    // ----------------- DELETING TESTS -----------------
+
     @Test
-    @Order(13)
+    @Order(17)
     void testDeleteExistingProduct() {
         String json = """
             {
@@ -286,12 +360,11 @@ class ProductControllerTest {
     }
 
     @Test
-    @Order(14)
+    @Order(18)
     void testDeleteNonExistingProduct() {
         RestAssured.given()
             .when().delete("/products/99999")
             .then()
             .statusCode(404);
     }
-
 }
