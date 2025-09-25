@@ -173,7 +173,7 @@ Default configuration (src/main/resources/application.properties):
 ### Optimistic Locking
 
 Products use a @Version field to prevent overwriting changes made by another process.
-If two updates occur simultaneously, a 409 Conflict error is returned when the version is outdated.
+If two updates occur simultaneously, an error is returned when the version is outdated.
 
 
 ### License
