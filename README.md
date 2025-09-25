@@ -74,6 +74,8 @@ This project implements CRUD operations for products, with pagination, validatio
 	Java 17+
 
 	Maven 3.9+
+	
+	Keycloak 26.3.5
 
 	Git
 
@@ -82,27 +84,95 @@ This project implements CRUD operations for products, with pagination, validatio
 	git clone https://github.com/hcasanova/product-inventory.git
 	cd product-inventory
 	
-### Create the key file for JWT
+### Setting up JWT
 
-Create the file "publicKey.pem" in src/main/resources/security/ and write your base64 key inside with the following format
+Create the file "publicKey.pem" and "privateKey.pem" in src/main/resources/security/ and put these lines inside both files with the following format:
 	
 	-----BEGIN PUBLIC KEY-----
-	yourkey
 	-----END PUBLIC KEY-----
+	
+Browse into de directory /security through the terminal and generate the privateKey using this command:
+
+	openssl genpkey -algorithm RSA -out privateKey.pem -pkeyopt rsa_keygen_bits:2048
+	
+Now your "privateKey.pem" should contain a correct value. To do the same with the "publicKey.pem" based on the private we created you must use:
+
+	openssl rsa -pubout -in privateKey.pem -out publicKey.pem
+	
+Now we have correct keys on our files and credentials can be signed and verified.
+
+The H2 database includes two users with their passwords already hashed with Argon2
+
+	username: admin
+	password: admin123
+	
+and
+
+	username: user
+	password: user123
+	
+The route http://localhost:8085/auth/login expects a header "Content-Type: application/json" and the body with the following format:
+
+	{
+	  "username": "admin",
+	  "password": "admin123"
+	}
+	
+Once done the API replies with the user token and additional data for the user logged.
+
+### Keycloak
+
+Download Keycloak 26.3.5 and start it in order for the login to work. To run Keycloak access the /bin through PowerShell in Windows folder inside and execute:
+
+	.\kc.bat start-dev
+	
+Or in Linux (untested):
+
+	chmod +x kc.sh
+	
+		
+Keycloak starts by default in http://localhost:8080. Access the URL and setup the user you want for Keycloak use.
+
+Create a "Realm" selecting the "Manage Realms" option in the menu -> Create realm and write the name of your realm, in this case we will be using "product-inventory-realm"
+
+Now we need to create a "Client" by pressing the "Clients" option in the menu -> Create client -> and in the "Cliend ID" field write "product-app", then press "Next" button and now we need to enable "Client authentication" and in "Authentication flow" we need to have active "Standard flow" and "Direct access grants"
+
+Still in the "Client" section, search for your "product-app" client and the "Roles" tab, then press "Create role" and in "Role name" use "admin". Do the same for "user"
+
+Next, we will create the desired users, in this case we want "admin" and "user". Select "Users" in the options menu -> Add user and write "admin" in the "Username" field, then press "Create" button.
+
+Users are created but no passwords are designed to them, so we acces the "Users" option in the menu, press over any of our newly created users and in the "Credentials" label we can press "Set password", we will use "admin123" and uncheck the "Temporary" option so it is "off" and then press on "Save".
+
+Now go to "Users" in the menu, select "admin", click the "Role mapping" and click on "Assign role" -> "Realm roles" and select "admin" and "user" and click on "Assign". Now the token bearer will contain these roles to be decrypted in our API.
+
+Login attempts from clients like Postman have trouble login, but there is a workaround. Go to the "Authentication" option in the menu, select the "Required actions" label you have to disable "Verify profile", "Update profile" and "Verify email".
+
+To get the token with Postman or another similar application, we will also need the "Client Secret" in order to be able to log in. To get this secret we need to find the client we created in "Clients", search for your client "product-app" and click on it. Select the tab "Credentials" and there is the Client Secret available.
+
+Create a new POST petition and write the following parameters in the body, selecting "x-www-form-urlencoded":
+	
+	grant_type: password
+	client_id: product-app
+	client_secret: yourclientsecret
+	username: admin
+	password: admin123
+
+The response should have the access token with some additional information.
+
 
 ### Run in Dev Mode
 
 	./mvnw quarkus:dev
 
-NOTE: Quarkus ships with a Dev UI available at http://localhost:8080/q/dev/
+NOTE: Quarkus ships with a Dev UI available at http://localhost:8085/q/dev/
 
-The app will be available at: http://localhost:8080
+The app will be available at: http://localhost:8085
 
 ### Swagger API Documentation
 
-    Swagger UI: http://localhost:8080/q/swagger-ui/
+    Swagger UI: http://localhost:8085/q/swagger-ui/
 
-OpenAPI Spec: http://localhost:8080/q/openapi
+OpenAPI Spec: http://localhost:8085/q/openapi
 
 ### Testing
 
