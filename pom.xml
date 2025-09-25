@@ -79,6 +79,13 @@
 		    <artifactId>quarkus-smallrye-openapi</artifactId>
 		</dependency>
 		
+		<!-- Flyway to feed data -->
+		<dependency>
+		    <groupId>io.quarkus</groupId>
+		    <artifactId>quarkus-flyway</artifactId>
+		</dependency>
+		
+		<!-- Google formatter -->
 		<dependency>
 		  <groupId>com.google.googlejavaformat</groupId>
 		  <artifactId>google-java-format</artifactId>
