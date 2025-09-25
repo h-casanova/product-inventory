@@ -14,27 +14,6 @@ This project implements CRUD operations for products, with pagination, validatio
 - **PUT /products/{id}** — Update an existing product with optimistic locking
 - **DELETE /products/{id}** — Delete a product
 
-### Request Example: Create a Product
-
-POST /products
-{
-  "name": "Laptop",
-  "description": "High-performance laptop",
-  "price": 1200.50,
-  "quantity": 5
-}
-
-### Response Example
-
-{
-  "id": 1,
-  "name": "Laptop",
-  "description": "High-performance laptop",
-  "price": 1200.50,
-  "quantity": 5,
-  "version": 0
-}
-
 ### Advanced Features (Expected)
 
 	Filtering products by name or price range
@@ -102,12 +81,20 @@ POST /products
 
 	git clone https://github.com/hcasanova/product-inventory.git
 	cd product-inventory
+	
+### Create the key file for JWT
+
+Create the file "publicKey.pem" in src/main/resources/security/ and write your base64 key inside with the following format
+	
+	-----BEGIN PUBLIC KEY-----
+	yourkey
+	-----END PUBLIC KEY-----
 
 ### Run in Dev Mode
 
 	./mvnw quarkus:dev
 
-    NOTE: Quarkus ships with a Dev UI available at http://localhost:8080/q/dev/
+NOTE: Quarkus ships with a Dev UI available at http://localhost:8080/q/dev/
 
 The app will be available at: http://localhost:8080
 
