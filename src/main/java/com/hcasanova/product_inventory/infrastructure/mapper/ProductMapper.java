@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class ProductMapper {
 
-  // Mapper to not expose the model layer
-
   public Product toEntity(ProductDTO dto) {
     Product product = new Product();
     product.name = dto.name;

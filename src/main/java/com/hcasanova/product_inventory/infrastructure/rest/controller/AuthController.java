@@ -17,6 +17,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 
 @Path("/auth")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -34,9 +35,9 @@ public class AuthController {
   int appPort;
 
   @POST
+  @Operation(summary = "Logs the user", description = "Manages the user log data with JWT")
   @Path("/login")
   public Response login(CredentialsDTO credentials) {
-    System.out.println("|| REST REQUEST || AuthController: login");
     AppUser user = userRepository.findByUsername(credentials.username);
 
     if (user == null) {

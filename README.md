@@ -1,18 +1,68 @@
 # Product Inventory API
 
-A REST API built with **Quarkus** and **Maven** to manage a product inventory.  
-This project implements CRUD operations for products, with pagination, validation, and optimistic locking to prevent concurrent update issues.
+A REST API built with Quarkus and Maven to manage a product inventory with hierarchical categories, allowing creation, modification, and deletion of both products and categories.
+
+The project includes secured endpoints using JWT for authentication and Role-Based Access Control (RBAC), supporting roles like user and admin.
+It follows Clean Architecture principles, clearly separating the domain, application, and infrastructure layers.
+
+Unit and integration tests are provided to ensure code quality and reliability.
+
+
+### Product
+
+- Manage products with full CRUD operations.
+- Support for bulk creation of products.
+- Pagination, filtering, and sorting on product listings.
+- Optimistic locking using @Version to prevent concurrent update issues.
+- Validation using Jakarta Bean Validation (@Valid and @NotNull annotations).
+
+#### Category 
+
+- Hierarchical category management with up to three nested levels.
+- Add or remove products dynamically from any category.
+- Fetch categories with their associated product IDs.
+
+### Security & Authentication
+
+- Integrated with JWT for authentication and authorization.
+- Supports admin and user roles
+- Two protected endpoints under /protected/*.
+
+### Documentation
+
+- Automatically generated OpenAPI/Swagger documentation (/q/swagger-ui).
+
+### Database
+
+- Uses H2 in-memory database in development and testing environments.
+
+### Optimistic locking
+
+- Products use a @Version field to prevent overwriting changes made by another process.
+If two updates occur simultaneously, an error is returned when the version is outdated.
 
 ---
 
 # Features
 
 ### Core Endpoints
-- **POST /products** — Create a new product
-- **GET /products** — Retrieve all products with pagination (10 products per page)
+- **POST /products/create-single** — Create a single product
+- **POST /products/create-bulk** — Create multiple products
+- **GET /products** — Retrieve all products with optional pagination, filtering and sorting
 - **GET /products/{id}** — Retrieve a specific product by ID
-- **PUT /products/{id}** — Update an existing product with optimistic locking
+- **PUT /products/{id}** — Update an existing product (requires version for optimistic locking)
 - **DELETE /products/{id}** — Delete a product
+
+- **POST /categories** — Create a new category
+- **GET /categories** — Retrieve all categories with their product IDs
+- **GET /categories/{id}** — Retrieve a specific category by ID
+- **PUT /categories/{id}** — Update the name of an existing category
+- **DELETE /categories/{id}** — Delete a category
+- **POST /categories/{categoryId}/add-product/{productId}** — Add an existing product to the specified category
+- **POST /categories/{categoryId}/remove-product/{productId}** — Remove a product from the specified category
+
+- **GET /protected/admin/products** — Retrieve all products (admin only)
+- **GET /protected/user/products** — Retrieve all products (user only)
 
 ### Advanced Features (Expected)
 
@@ -45,45 +95,56 @@ This project implements CRUD operations for products, with pagination, validatio
 	pom.xml
 
 	src/main/java/com/hcasanova/product_inventory/
-
+		
+		application/service
+		
 		domain/model/
-
-		application/service/
-
+		
+		infrastructure/mapper
+		
 		infrastructure/persistence/repository/
-
+		
 		infrastructure/rest/controller/
-
+		
 		infrastructure/rest/dto/
+		
+		infrastructure/rest/security/
 
 	src/main/resources/
-
+		
 		application.properties
-
-		db/initialDataFeed.sql
+		
+		application-dev.properties
+		
+		db/migration/
+		
+		postman/
+		
+		security/
 
 	src/test/resources/
-	
+		
+		application.properties
+		
 		application-test.properties
 		
-		db/initialDataFeed.sql
+		db/migration/
+		
 
 ### Running the Project
 ##### Prerequisites
 
 	Java 17+
-
 	Maven 3.9+
-	
-	Keycloak 26.3.5
-
+	Postman
 	Git
 
 ### Clone the Repository
 
 	git clone https://github.com/hcasanova/product-inventory.git
-	cd product-inventory
 	
+	cd product-inventory
+
 ### Setting up JWT
 
 Create the file "publicKey.pem" and "privateKey.pem" in src/main/resources/security/ and put these lines inside both files with the following format:
@@ -115,123 +176,31 @@ The route http://localhost:8085/auth/login expects a header "Content-Type: appli
 
 	{
 	  "username": "admin",
-	  "password": "admin123"
 	}
 	
 Once done the API replies with the user token and additional data for the user logged.
 
-### Keycloak
-
-Download Keycloak 26.3.5 and start it in order for the login to work. To run Keycloak access the /bin through PowerShell in Windows folder inside and execute:
-
-	.\kc.bat start-dev
-	
-Or in Linux (untested):
-
-	chmod +x kc.sh
-	
-		
-Keycloak starts by default in http://localhost:8080. Access the URL and setup the user you want for Keycloak use.
-
-Create a "Realm" selecting the "Manage Realms" option in the menu -> Create realm and write the name of your realm, in this case we will be using "product-inventory-realm"
-
-Now we need to create a "Client" by pressing the "Clients" option in the menu -> Create client -> and in the "Cliend ID" field write "product-app", then press "Next" button and now we need to enable "Client authentication" and in "Authentication flow" we need to have active "Standard flow" and "Direct access grants"
-
-Still in the "Client" section, search for your "product-app" client and the "Roles" tab, then press "Create role" and in "Role name" use "admin". Do the same for "user"
-
-Next, we will create the desired users, in this case we want "admin" and "user". Select "Users" in the options menu -> Add user and write "admin" in the "Username" field, then press "Create" button.
-
-Users are created but no passwords are designed to them, so we acces the "Users" option in the menu, press over any of our newly created users and in the "Credentials" label we can press "Set password", we will use "admin123" and uncheck the "Temporary" option so it is "off" and then press on "Save".
-
-Now go to "Users" in the menu, select "admin", click the "Role mapping" and click on "Assign role" -> "Realm roles" and select "admin" and "user" and click on "Assign". Now the token bearer will contain these roles to be decrypted in our API.
-
-Login attempts from clients like Postman have trouble login, but there is a workaround. Go to the "Authentication" option in the menu, select the "Required actions" label you have to disable "Verify profile", "Update profile" and "Verify email".
-
-To get the token with Postman or another similar application, we will also need the "Client Secret" in order to be able to log in. To get this secret we need to find the client we created in "Clients", search for your client "product-app" and click on it. Select the tab "Credentials" and there is the Client Secret available.
-
-Create a new POST petition and write the following parameters in the body, selecting "x-www-form-urlencoded":
-	
-	grant_type: password
-	client_id: product-app
-	client_secret: yourclientsecret
-	username: admin
-	password: admin123
-
-The response should have the access token with some additional information.
-
-
 ### Run in Dev Mode
 
-	./mvnw quarkus:dev
+	mvn quarkus:dev
 
-NOTE: Quarkus ships with a Dev UI available at http://localhost:8085/q/dev/
-
-The app will be available at: http://localhost:8085
-
-### Swagger API Documentation
-
-    Swagger UI: http://localhost:8085/q/swagger-ui/
-
-OpenAPI Spec: http://localhost:8085/q/openapi
+The app will be available at: **http://localhost:8085**
 
 ### Testing
 
 Run unit and integration tests:
 
-	./mvnw test
+	mvn test
 	
 Run only integration tests:
 
-	./mvnw verify
+	mvn verify
 
 Includes positive (2xx) and negative (4xx/5xx) scenarios.
 
-### Packaging and Running
+### Swagger API Documentation
 
-##### Package the application:
-
-	./mvnw package
-
-The application produces quarkus-run.jar in target/quarkus-app/ and can be run with:
-
-	java -jar target/quarkus-app/quarkus-run.jar
-
-##### To create an über-jar:
-
-	./mvnw package -Dquarkus.package.jar.type=uber-jar
-
-##### Run with:
-
-	java -jar target/*-runner.jar
-
-##### Creating a Native Executable
-
-	./mvnw package -Dnative
-
-##### Or with container build if GraalVM is not installed:
-
-	./mvnw package -Dnative -Dquarkus.native.container-build=true
-
-##### Run the native executable:
-
-	./target/product-inventory-1.0.0-SNAPSHOT-runner
-
-### H2 Database Configuration
-
-Default configuration (src/main/resources/application.properties):
-
-	quarkus.datasource.db-kind=h2
-	quarkus.datasource.jdbc.url=jdbc:h2:./productDB
-	quarkus.datasource.username=desiredUser
-	quarkus.datasource.password=desiredPassword
-
-	quarkus.hibernate-orm.database.generation=drop-and-create
-
-### Optimistic Locking
-
-Products use a @Version field to prevent overwriting changes made by another process.
-If two updates occur simultaneously, an error is returned when the version is outdated.
-
+    Swagger UI: http://localhost:8085/openapi/
 
 ### License
 MIT License
