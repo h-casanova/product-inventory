@@ -7,6 +7,90 @@
 	},
 	"item": [
 		{
+			"name": "Login with implemented JWT",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"admin\",\r\n  \"password\": \"admin123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/auth/login",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login with Keycloak",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "product-app",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "n7ksnj9vYL49joECY8zLJcmTGpgSqyFJ",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "admin123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{keycloak}}/realms/product-inventory-realm/protocol/openid-connect/token",
+					"host": [
+						"{{keycloak}}"
+					],
+					"path": [
+						"realms",
+						"product-inventory-realm",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "List all products",
 			"request": {
 				"method": "GET",
@@ -57,6 +141,47 @@
 						{
 							"key": "size",
 							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List products parametrized",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{localhost}}/products?name=Laptop&maxPrice=2000&sortBy=name&sortAsc=false",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Laptop"
+						},
+						{
+							"key": "maxPrice",
+							"value": "2000"
+						},
+						{
+							"key": "sortBy",
+							"value": "name"
+						},
+						{
+							"key": "sortAsc",
+							"value": "false"
 						}
 					]
 				}
@@ -263,6 +388,274 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "List all categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/categories",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a category",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"New Category\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/categories",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit a category",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"New Category Updated\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/categories/4",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"categories",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a category",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/categories/4",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"categories",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add product to category",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/categories/2/add-product/8",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"categories",
+						"2",
+						"add-product",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete product from category",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/categories/2/remove-product/8",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"categories",
+						"2",
+						"remove-product",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Protected route JWT admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInVwbiI6ImFkbWluIiwiZ3JvdXBzIjpbImFkbWluIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4NSIsImlhdCI6MTc1ODgzOTYzMywiZXhwIjoxNzU4ODQ2ODMzLCJqdGkiOiIwZDc1NTJjZi1jMWJlLTRmNGUtYWE5Ny05ZjNmOWVkMGU5ZDIifQ.yTWoaflUfdYnC6k9wkox_baFeT5p0SV2g2sYyXi0uuq80cAndEhZr1qO8NfvcbDh9kfoLFD8BeqHVfM1NIEqkut1lecsiDW1XbGqus-p3PFL2bTJsPDOZpshCQPV_r2ScmPms00YtWKxslTgFde-DQx1owm5jSTET05YJBbKHLJtpGXlBD6hpmyKHJIPiylX_ac0ap-RYhFi6NuxE9f5h9Xr04GkuSAcnIAqX5yIeh3Bzkm9C7g4srVHP6cjAFUWgspYy0agzWCCrkZwMSC7IeWkf571BdCya6b9AOwZKWSQ1bJiTA5H90bXshR7kNHlnOxvm5Zvw-82mt3MHsG46Q",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{localhost}}/protected/admin/products",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"protected",
+						"admin",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Protected route JWT user Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInVwbiI6ImFkbWluIiwiZ3JvdXBzIjpbImFkbWluIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4NSIsImlhdCI6MTc1ODgzOTYzMywiZXhwIjoxNzU4ODQ2ODMzLCJqdGkiOiIwZDc1NTJjZi1jMWJlLTRmNGUtYWE5Ny05ZjNmOWVkMGU5ZDIifQ.yTWoaflUfdYnC6k9wkox_baFeT5p0SV2g2sYyXi0uuq80cAndEhZr1qO8NfvcbDh9kfoLFD8BeqHVfM1NIEqkut1lecsiDW1XbGqus-p3PFL2bTJsPDOZpshCQPV_r2ScmPms00YtWKxslTgFde-DQx1owm5jSTET05YJBbKHLJtpGXlBD6hpmyKHJIPiylX_ac0ap-RYhFi6NuxE9f5h9Xr04GkuSAcnIAqX5yIeh3Bzkm9C7g4srVHP6cjAFUWgspYy0agzWCCrkZwMSC7IeWkf571BdCya6b9AOwZKWSQ1bJiTA5H90bXshR7kNHlnOxvm5Zvw-82mt3MHsG46Q",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{localhost}}/protected/user/products",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"protected",
+						"user",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Protected route Keykloak admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{localhost}}/protected/admin/products",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"protected",
+						"admin",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Protected route Keykloak user Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJvbTFrVW1Hb2pDNmtXUW1qRHhJZ0RzZ0VQTDFoZEt1TnZ0Q1dxYmUxTTA4In0.eyJleHAiOjE3NTg4NDE5OTQsImlhdCI6MTc1ODg0MTY5NCwianRpIjoib25ydHJvOjliY2QxZjEyLWRkZjgtNjE3Mi02MzQ5LTYzYmEwY2RmZDFjNyIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9yZWFsbXMvcHJvZHVjdC1pbnZlbnRvcnktcmVhbG0iLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMjc1ZjIyOWYtNmQzMi00YWQ2LThmOGUtYzRiMGE5YjhmYmM5IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoicHJvZHVjdC1hcHAiLCJzaWQiOiIzYmUzZmZlMS00MTA5LTRhZTItOTM5YS01ODk4NjNkMDA2MzkiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHA6Ly9sb2NhbGhvc3Q6ODA4NSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1wcm9kdWN0LWludmVudG9yeS1yZWFsbSIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJwcm9kdWN0LWFwcCI6eyJyb2xlcyI6WyJhZG1pbiIsInVzZXIiXX0sImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWRtaW4ifQ.BTsdo4FoUSihEu7zC16ek3llVFkG5vJI6URnh7A06NVT4Y4TVrBZyyCV4-DXBS6ICXH9DKItLVPr-Qi21hprRV3isMb3N0vjncAXEejSCaZYSDrzEOIL6pKXtO28fPwfOhD_-N9w-VWle0r69PbX_BL0CVa4FeHdPJkdzPPNViZQ-hpbEVWChUCS4y9ow-3ocISIZz4l3IzV5e-VF9PKdWlB_yr1L3f2-EVHE28RCegB1a-Fu04ZUPWx1e7yzWcKhQ0tVoH0O8EgKyQO-KV6hB4q0lziO2vTrx8kwznHifEgi2ubQ9NUSzZExwTYUcAU6RKi0q3PNnRnt5KqTX--ZQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{localhost}}/protected/user/products",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"protected",
+						"user",
+						"products"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -292,6 +685,10 @@
 	"variable": [
 		{
 			"key": "localhost",
+			"value": ""
+		},
+		{
+			"key": "keycloak",
 			"value": ""
 		}
 	]

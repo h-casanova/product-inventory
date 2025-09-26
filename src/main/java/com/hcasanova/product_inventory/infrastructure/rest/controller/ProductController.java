@@ -45,7 +45,6 @@ public class ProductController {
       @QueryParam("maxPrice") Double maxPrice,
       @QueryParam("sortBy") String sortBy,
       @QueryParam("sortAsc") @DefaultValue("true") boolean sortAsc) {
-
     List<Product> products =
         productService.listAll(page, size, name, minPrice, maxPrice, sortBy, sortAsc);
     return productMapper.toDTOList(products);

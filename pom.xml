@@ -85,29 +85,6 @@
 		    <artifactId>quarkus-flyway</artifactId>
 		</dependency>
 		
-		<!-- Security -->
-		<dependency>
-		    <groupId>io.quarkus</groupId>
-		    <artifactId>quarkus-security</artifactId>
-		</dependency>
-		
-		<!-- JWT -->
-		<dependency>
-		  <groupId>io.quarkus</groupId>
-		  <artifactId>quarkus-smallrye-jwt</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>io.quarkus</groupId>
-		    <artifactId>quarkus-smallrye-jwt-build</artifactId>
-		</dependency>
-		
-		<!-- Encryption -->
-		<dependency>
-		    <groupId>de.mkammerer</groupId>
-		    <artifactId>argon2-jvm</artifactId>
-		    <version>2.12</version>
-		</dependency>
-		
 		<!-- OAUTH2 -->
 		<dependency>
 		    <groupId>io.quarkus</groupId>
