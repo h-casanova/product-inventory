@@ -144,8 +144,14 @@ If two updates occur simultaneously, an error is returned when the version is ou
 	git clone https://github.com/h-casanova/product-inventory.git
 	
 	cd product-inventory
+	
+### Import the project
+
+Import the project as Maven project in your favorite IDE.
 
 ### Setting up JWT
+
+The project is ready to run with public and private keys created, although it is important to **delete them create new ones in case you use it in a production environment**.
 
 Create the file "publicKey.pem" and "privateKey.pem" in src/main/resources/security/ and put these lines inside both files with the following format:
 	
