@@ -15,14 +15,12 @@ Unit and integration tests are provided to ensure code quality and reliability.
 - Pagination, filtering, and sorting on product listings.
 - Optimistic locking using @Version to prevent concurrent update issues.
 - Validation using Jakarta Bean Validation (@Valid and @NotNull annotations).
-- Products can belong to up to three hierarchical category levels (category_1, category_2, category_3).
 
 #### Category 
 
 - Hierarchical category management with up to three nested levels.
 - Add or remove products dynamically from any category.
 - Fetch categories with their associated product IDs.
-- Bulk delete and category filtering support.
 
 ### Security & Authentication
 
