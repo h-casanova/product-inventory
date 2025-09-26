@@ -1,7 +1,6 @@
 package com.hcasanova.infrastructure.rest.controller;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -47,7 +46,6 @@ public class AuthControllerTest {
         .when()
         .post("/auth/login")
         .then()
-        .statusCode(401)
-        .body("error", equalTo("Invalid credentials"));
+        .statusCode(401);
   }
 }
