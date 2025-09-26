@@ -141,7 +141,7 @@ If two updates occur simultaneously, an error is returned when the version is ou
 
 ### Clone the Repository
 
-	git clone https://github.com/hcasanova/product-inventory.git
+	git clone https://github.com/h-casanova/product-inventory.git
 	
 	cd product-inventory
 
