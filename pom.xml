@@ -85,7 +85,7 @@
 		    <artifactId>quarkus-flyway</artifactId>
 		</dependency>
 		
-		<!-- OAUTH2 -->
+		<!-- AUTH -->
 		<dependency>
 		    <groupId>io.quarkus</groupId>
 		    <artifactId>quarkus-oidc</artifactId>

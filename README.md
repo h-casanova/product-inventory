@@ -1,7 +1,47 @@
 # Product Inventory API
 
-A REST API built with **Quarkus** and **Maven** to manage a product inventory.  
-This project implements CRUD operations for products, with pagination, validation, and optimistic locking to prevent concurrent update issues.
+A REST API built with Quarkus and Maven to manage a product inventory with hierarchical categories, allowing creation, modification, and deletion of both products and categories.
+
+The project includes secured endpoints using Keycloak for authentication and Role-Based Access Control (RBAC), supporting roles like user and admin.
+It follows Clean Architecture principles, clearly separating the domain, application, and infrastructure layers.
+
+Unit and integration tests are provided to ensure code quality and reliability.
+
+
+### Product
+
+- Manage products with full CRUD operations.
+- Support for bulk creation of products.
+- Pagination, filtering, and sorting on product listings.
+- Optimistic locking using @Version to prevent concurrent update issues.
+- Validation using Jakarta Bean Validation (@Valid and @NotNull annotations).
+- Products can belong to up to three hierarchical category levels (category_1, category_2, category_3).
+
+#### Category 
+
+- Hierarchical category management with up to three nested levels.
+- Add or remove products dynamically from any category.
+- Fetch categories with their associated product IDs.
+- Bulk delete and category filtering support.
+
+### Security & Authentication
+
+- Integrated with Keycloak for authentication and authorization.
+- Supports admin and user roles
+- Two protected endpoints under /protected/*.
+
+### Documentation
+
+- Automatically generated OpenAPI/Swagger documentation (/q/swagger-ui).
+
+### Database
+
+- Uses H2 in-memory database in development and testing environments.
+
+### Optimistic locking
+
+- Products use a @Version field to prevent overwriting changes made by another process.
+If two updates occur simultaneously, an error is returned when the version is outdated.
 
 ---
 
@@ -57,27 +97,27 @@ This project implements CRUD operations for products, with pagination, validatio
 	pom.xml
 
 	src/main/java/com/hcasanova/product_inventory/
-
+		
 		application/service
-
+		
 		domain/model/
 		
 		infrastructure/mapper
-
+		
 		infrastructure/persistence/repository/
-
+		
 		infrastructure/rest/controller/
-
+		
 		infrastructure/rest/dto/
 		
 		infrastructure/rest/security/
 
 	src/main/resources/
-
+		
 		application.properties
 		
 		application-dev.properties
-
+		
 		db/migration/
 		
 		postman/
@@ -85,9 +125,9 @@ This project implements CRUD operations for products, with pagination, validatio
 		security/
 
 	src/test/resources/
-	
+		
 		application.properties
-	
+		
 		application-test.properties
 		
 		db/migration/
@@ -105,6 +145,7 @@ This project implements CRUD operations for products, with pagination, validatio
 ### Clone the Repository
 
 	git clone https://github.com/hcasanova/product-inventory.git
+	
 	cd product-inventory
 
 ### Keycloak Setup
@@ -148,33 +189,25 @@ The response should have the access token with some additional information.
 
 ### Run in Dev Mode
 
-	./mvnw quarkus:dev
+	mvn quarkus:dev
 
-NOTE: Quarkus ships with a Dev UI available at http://localhost:8085/q/dev/
-
-The app will be available at: http://localhost:8085
-
-### Swagger API Documentation
-
-    Swagger UI: http://localhost:8085/openapi/
+The app will be available at: **http://localhost:8085**
 
 ### Testing
 
 Run unit and integration tests:
 
-	./mvnw test
+	mvnw test
 	
 Run only integration tests:
 
-	./mvnw verify
+	mvnw verify
 
 Includes positive (2xx) and negative (4xx/5xx) scenarios.
 
-### Optimistic Locking
+### Swagger API Documentation
 
-Products use a @Version field to prevent overwriting changes made by another process.
-If two updates occur simultaneously, an error is returned when the version is outdated.
-
+    Swagger UI: http://localhost:8085/openapi/
 
 ### License
 MIT License

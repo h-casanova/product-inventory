@@ -7,6 +7,18 @@
 	},
 	"item": [
 		{
+			"name": "Product",
+			"item": []
+		},
+		{
+			"name": "Category",
+			"item": []
+		},
+		{
+			"name": "Login and protected routes",
+			"item": []
+		},
+		{
 			"name": "Login with implemented JWT",
 			"request": {
 				"method": "POST",
@@ -553,7 +565,7 @@
 			"response": []
 		},
 		{
-			"name": "Protected route JWT user Copy",
+			"name": "Protected route JWT user",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -623,14 +635,14 @@
 			"response": []
 		},
 		{
-			"name": "Protected route Keykloak user Copy",
+			"name": "Protected route Keykloak user",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJvbTFrVW1Hb2pDNmtXUW1qRHhJZ0RzZ0VQTDFoZEt1TnZ0Q1dxYmUxTTA4In0.eyJleHAiOjE3NTg4NDE5OTQsImlhdCI6MTc1ODg0MTY5NCwianRpIjoib25ydHJvOjliY2QxZjEyLWRkZjgtNjE3Mi02MzQ5LTYzYmEwY2RmZDFjNyIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9yZWFsbXMvcHJvZHVjdC1pbnZlbnRvcnktcmVhbG0iLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMjc1ZjIyOWYtNmQzMi00YWQ2LThmOGUtYzRiMGE5YjhmYmM5IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoicHJvZHVjdC1hcHAiLCJzaWQiOiIzYmUzZmZlMS00MTA5LTRhZTItOTM5YS01ODk4NjNkMDA2MzkiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHA6Ly9sb2NhbGhvc3Q6ODA4NSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1wcm9kdWN0LWludmVudG9yeS1yZWFsbSIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJwcm9kdWN0LWFwcCI6eyJyb2xlcyI6WyJhZG1pbiIsInVzZXIiXX0sImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWRtaW4ifQ.BTsdo4FoUSihEu7zC16ek3llVFkG5vJI6URnh7A06NVT4Y4TVrBZyyCV4-DXBS6ICXH9DKItLVPr-Qi21hprRV3isMb3N0vjncAXEejSCaZYSDrzEOIL6pKXtO28fPwfOhD_-N9w-VWle0r69PbX_BL0CVa4FeHdPJkdzPPNViZQ-hpbEVWChUCS4y9ow-3ocISIZz4l3IzV5e-VF9PKdWlB_yr1L3f2-EVHE28RCegB1a-Fu04ZUPWx1e7yzWcKhQ0tVoH0O8EgKyQO-KV6hB4q0lziO2vTrx8kwznHifEgi2ubQ9NUSzZExwTYUcAU6RKi0q3PNnRnt5KqTX--ZQ",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJvbTFrVW1Hb2pDNmtXUW1qRHhJZ0RzZ0VQTDFoZEt1TnZ0Q1dxYmUxTTA4In0.eyJleHAiOjE3NTg4NDIxNDYsImlhdCI6MTc1ODg0MTg0NiwianRpIjoib25ydHJvOmRlNjFiYjIyLWExNWEtYzZiMy1lMzI5LWEzOGJjZTc1ZWNjNiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9yZWFsbXMvcHJvZHVjdC1pbnZlbnRvcnktcmVhbG0iLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiODM2ZGY3ZmMtZGRmMi00OTkyLWI4OTQtOGMxNTgyYmQwYTNkIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoicHJvZHVjdC1hcHAiLCJzaWQiOiI4NzU2MjgxMi03MDdlLTRlY2UtODg2MC0yNjM3NDRmYTNkMjYiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHA6Ly9sb2NhbGhvc3Q6ODA4NSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1wcm9kdWN0LWludmVudG9yeS1yZWFsbSIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJwcm9kdWN0LWFwcCI6eyJyb2xlcyI6WyJ1c2VyIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInByZWZlcnJlZF91c2VybmFtZSI6InVzZXIifQ.Tvs5uVnd5FbHWM0IzP_Nxkv1tJyTioNjYXKYL2u9a0LZZRYIcj-Mii5rAI4jotJPIIpea_rkhxNhhO00LZIDMtGCRZQmxj-oiukuPZxCWU1juWffK3eBNga4uDeLNvadBQN4WswPysYPx0NKe7a7hoXYVm7l8fulM3r-oDfnr2lVEgOqCwrZmpahJo7_nTs3YOr9gD_Q6fy_NzFQXVyO21mn6_YvCK-UwqbKOwuBz7vWUKP_xbGUdRjFyDA3t-m3BRDYZvtVB0xqQHTWC08Vpn81moExlDYyotoO1oRh_88Avj1MbzLjg-hjryBlQJ49y1w9QwLW2fwy_LwoXMiiRQ",
 							"type": "string"
 						}
 					]
