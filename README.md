@@ -146,6 +146,10 @@ If two updates occur simultaneously, an error is returned when the version is ou
 	
 	cd product-inventory
 
+### Import the project
+
+Import the project as Maven project in your favorite IDE.
+
 ### Keycloak Setup
 
 Download Keycloak 26.3.5. To run Keycloak access the /bin through PowerShell in Windows folder inside and execute:
