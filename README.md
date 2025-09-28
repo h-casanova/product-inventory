@@ -178,7 +178,7 @@ If login attempts from clients like Postman fail, there is a workaround: go to A
 
 To get the token with Postman or another similar application, you will need the Client Secret. To obtain it: go to Clients, select your "product-app" client → go to the Credentials tab. The Client Secret will be available there.
 
-Finally, create a new POST request and add the following parameters in the body, selecting x-www-form-urlencoded:
+Finally, create a new POST request and add the following parameters in the body, selecting x-www-form-urlencoded to http://localhost:8080/realms/product-inventory-realm/protocol/openid-connect/token:
 	
 	grant_type: password
 	client_id: product-app
